@@ -1,0 +1,68 @@
+[
+	{
+		"Type": "SRD_HUDMakerUltra.js",
+		"Version": "1.0.1",
+		"Changes": [
+			"Fixed Width, Height, and Openness animations for Window components."
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.1",
+		"Changes": [
+			"Theme system mostly complete. Can create custom themes, and edit your custom themes afterwards. There are some color options missing, and probably best to cluster some of the color options together for convenience.",
+			"You can now drag an "rmmzproject" file into the HUD Maker editor to open the project automatically.",
+			"Clicking on an item in the component list will automatically give focus on the graphics editor. So you can now click on the list and then move the component with the arrow keys. Small convenience. Feature. Feels good."
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.2",
+		"Changes": [
+			"Theme system much more polished and complete now. Much more color options. Is this a good thing? Who knows. I also went ahead and tinkered with the default theme, gave it a bit more blue. There's also a "Red Tinted" theme available as well. Unfortunately, themes made in v1.0.1 will no longer work."
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.3",
+		"Changes": [
+			"Code box windows can now be expanded to larger preset sizes using button in bottom-left. It will retain the size you set it to each session.",
+			"The default "template" for when you open HUD Maker in a project for the first time has been changed drastically.",
+			"Fixed various bugs with plugins."
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.4",
+		"Changes": [
+			"Can temporarily show/hide components with context menu or CTRL+Q.",
+			"Remembers group open/closed state.",
+			"Murdered various bugs."
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.5",
+		"Changes": [
+			"Added ability to take screen-shots in SRD_HUDMakerUltra.js for use in the editor. Enable the feature in the Plugin Manager then press CTRL + S in game.",
+			"Links now point to redirects that can be modified without modifying the program.",
+			"Backstabbed more insects."
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.6",
+		"Changes": [
+			"Added "Map Name" to Map Info. Original "Map Name" switched to "Map Display Name" for distinction. ",
+			"Added "Hue" property to animations for Pro version.",
+			"More bugs dead confirmed??"
+		]
+	},
+	{
+		"Type": "HUD Maker Ultra Editor",
+		"Version": "1.0.7",
+		"Changes": [
+			"Fixed major list bugs."
+		]
+	}
+]
