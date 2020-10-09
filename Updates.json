@@ -11,7 +11,7 @@
 		"Version": "1.0.1",
 		"Changes": [
 			"Theme system mostly complete. Can create custom themes, and edit your custom themes afterwards. There are some color options missing, and probably best to cluster some of the color options together for convenience.",
-			"You can now drag an "rmmzproject" file into the HUD Maker editor to open the project automatically.",
+			"You can now drag an \"rmmzproject\" file into the HUD Maker editor to open the project automatically.",
 			"Clicking on an item in the component list will automatically give focus on the graphics editor. So you can now click on the list and then move the component with the arrow keys. Small convenience. Feature. Feels good."
 		]
 	},
@@ -27,7 +27,7 @@
 		"Version": "1.0.3",
 		"Changes": [
 			"Code box windows can now be expanded to larger preset sizes using button in bottom-left. It will retain the size you set it to each session.",
-			"The default "template" for when you open HUD Maker in a project for the first time has been changed drastically.",
+			"The default \"template\" for when you open HUD Maker in a project for the first time has been changed drastically.",
 			"Fixed various bugs with plugins."
 		]
 	},
@@ -53,8 +53,8 @@
 		"Type": "HUD Maker Ultra Editor",
 		"Version": "1.0.6",
 		"Changes": [
-			"Added "Map Name" to Map Info. Original "Map Name" switched to "Map Display Name" for distinction. ",
-			"Added "Hue" property to animations for Pro version.",
+			"Added \"Map Name\" to Map Info. Original \"Map Name\" switched to \"Map Display Name\" for distinction. ",
+			"Added \"Hue\" property to animations for Pro version.",
 			"More bugs dead confirmed??"
 		]
 	},
