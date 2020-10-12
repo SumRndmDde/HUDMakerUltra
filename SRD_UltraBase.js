@@ -8,7 +8,7 @@
  * @help
  * ============================================================================
  *                                  Ultra Base
- *                                 Version 1.0.4
+ *                                 Version 1.0.5
  *                                    SRDude
  * ============================================================================
  *
@@ -34,7 +34,7 @@ var SRD = SRD || {};
 SRD.UltraBase = SRD.UltraBase || {};
 
 var Imported = Imported || {};
-Imported.SRD_UltraBase = 0x010004; // 1.0.4
+Imported.SRD_UltraBase = 0x010005; // 1.0.5
 
 (function($) {
 
@@ -2383,6 +2383,23 @@ $.Game_System_onBeforeSave = Game_System.prototype.onBeforeSave;
 Game_System.prototype.onBeforeSave = function() {
 	$.Game_System_onBeforeSave.apply(this, arguments);
 	this.onSystemStatsChanged.trigger();
+};
+
+//=============================================================================
+// * Game_Actor
+// *
+// * Added an `UltraSignal` that triggers whenever actor face image is changed.
+//=============================================================================
+$.Game_Actor_initialize = Game_Actor.prototype.initialize;
+Game_Actor.prototype.initialize = function() {
+	$.Game_Actor_initialize.apply(this, arguments);
+	this.onFaceImageChanged = new UltraSignal();
+};
+
+$.Game_Actor_setFaceImage = Game_Actor.prototype.setFaceImage;
+Game_Actor.prototype.setFaceImage = function(faceName, faceIndex) {
+	$.Game_Actor_setFaceImage.apply(this, arguments);
+	this.onFaceImageChanged.trigger();
 };
 
 //=============================================================================

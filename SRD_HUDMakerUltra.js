@@ -78,7 +78,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.6
+ *                                 Version 1.0.7
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +106,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010006; // 1.0.6
+Imported.SRD_HUDMakerUltra = 0x010007; // 1.0.7
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -1662,6 +1662,8 @@ class Sprite_UltraHUDComponent_ActorFace extends Sprite_UltraHUDComponent {
 	initialize(data, hud) {
 		super.initialize(data, hud);
 		this._dynamicActorID = null;
+		this._oldActor = null;
+		this._oldActorSignalId = null;
 		this.setupDynamicActorID();
 	}
 
@@ -1674,16 +1676,28 @@ class Sprite_UltraHUDComponent_ActorFace extends Sprite_UltraHUDComponent {
 	renderBitmap(actorId) {
 		const actor = $gameActors.actor(actorId);
 		if(actor) {
-			if(!this.bitmap) {
-				this.bitmap = new Bitmap(ImageManager.faceWidth, ImageManager.faceHeight);
+			if(this._oldActor !== null && this._oldActorSignalId !== null) {
+				this._oldActor.onFaceImageChanged.remove(this._oldActorSignalId);
+				this._oldActor = null;
+				this._oldActorSignalId = null;
 			}
-			const faceName = actor.faceName();
-			const faceNameBitmap = ImageManager.loadFace(faceName);
-			if(faceNameBitmap.isReady()) {
-				Window_Base.prototype.drawFace.call({ contents: this.bitmap }, faceName, actor.faceIndex(), 0, 0);
-			} else {
-				faceNameBitmap.addLoadListener(this.renderBitmap.bind(this, actorId));
-			}
+			this.renderBitmapInternal(actor);
+			this._oldActor = actor;
+			this._oldActorSignalId = actor.onFaceImageChanged.run(this.renderBitmapInternal.bind(this, actor));
+		}
+	}
+
+	renderBitmapInternal(actor, actorId) {
+		if(!this.bitmap) {
+			this.bitmap = new Bitmap(ImageManager.faceWidth, ImageManager.faceHeight);
+		}
+		const faceName = actor.faceName();
+		const faceNameBitmap = ImageManager.loadFace(faceName);
+		if(faceNameBitmap.isReady()) {
+			this.bitmap.clear();
+			Window_Base.prototype.drawFace.call({ contents: this.bitmap }, faceName, actor.faceIndex(), 0, 0);
+		} else {
+			faceNameBitmap.addLoadListener(this.renderBitmapInternal.bind(this, actor, actorId));
 		}
 	}
 
