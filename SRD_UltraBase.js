@@ -8,7 +8,7 @@
  * @help
  * ============================================================================
  *                                  Ultra Base
- *                                 Version 1.0.5
+ *                                 Version 1.0.6
  *                                    SRDude
  * ============================================================================
  *
@@ -34,7 +34,7 @@ var SRD = SRD || {};
 SRD.UltraBase = SRD.UltraBase || {};
 
 var Imported = Imported || {};
-Imported.SRD_UltraBase = 0x010005; // 1.0.5
+Imported.SRD_UltraBase = 0x010006; // 1.0.6
 
 (function($) {
 
@@ -486,18 +486,18 @@ class UltraEasingCurve {
 	}
 
 	static elasticEaseIn(v) {
-		return Math.sin(13 * M_PI_2 * v) * Math.pow(2, 10 * (v - 1));
+		return Math.sin(13 * this.M_PI_2 * v) * Math.pow(2, 10 * (v - 1));
 	}
 
 	static elasticEaseOut(v) {
-		return Math.sin(-13 * M_PI_2 * (v + 1)) * Math.pow(2, -10 * v) + 1;
+		return Math.sin(-13 * this.M_PI_2 * (v + 1)) * Math.pow(2, -10 * v) + 1;
 	}
 
 	static elasticEaseInOut(v) {
 		if(v < 0.5) {
-			return 0.5 * Math.sin(13 * M_PI_2 * (2 * v)) * Math.pow(2, 10 * ((2 * v) - 1));
+			return 0.5 * Math.sin(13 * this.M_PI_2 * (2 * v)) * Math.pow(2, 10 * ((2 * v) - 1));
 		} else {
-			return 0.5 * (Math.sin(-13 * M_PI_2 * ((2 * v - 1) + 1)) * Math.pow(2, -10 * (2 * v - 1)) + 2);
+			return 0.5 * (Math.sin(-13 * this.M_PI_2 * ((2 * v - 1) + 1)) * Math.pow(2, -10 * (2 * v - 1)) + 2);
 		}
 	}
 
