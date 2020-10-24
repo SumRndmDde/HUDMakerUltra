@@ -8,7 +8,7 @@
  * @help
  * ============================================================================
  *                                  Ultra Base
- *                                 Version 1.0.6
+ *                                 Version 1.0.7
  *                                    SRDude
  * ============================================================================
  *
@@ -34,7 +34,7 @@ var SRD = SRD || {};
 SRD.UltraBase = SRD.UltraBase || {};
 
 var Imported = Imported || {};
-Imported.SRD_UltraBase = 0x010006; // 1.0.6
+Imported.SRD_UltraBase = 0x010007; // 1.0.7
 
 (function($) {
 
@@ -1886,7 +1886,7 @@ class UltraDynamicValue_ActorComponent extends UltraDynamicValue_BaseComponent {
 				case 12: { this._resultNumber = actor.def; break }
 				case 13: { this._resultNumber = actor.mat; break }
 				case 14: { this._resultNumber = actor.mdf; break }
-				case 15: { this._resultNumber = actor.spd; break }
+				case 15: { this._resultNumber = actor.agi; break }
 				case 16: { this._resultNumber = actor.luk; break }
 			}
 		}
@@ -1969,7 +1969,7 @@ class UltraDynamicValue_EnemyComponent extends UltraDynamicValue_BaseComponent {
 				case 10: { this._resultNumber = actor.def; break }
 				case 11: { this._resultNumber = actor.mat; break }
 				case 12: { this._resultNumber = actor.mdf; break }
-				case 13: { this._resultNumber = actor.spd; break }
+				case 13: { this._resultNumber = actor.agi; break }
 				case 14: { this._resultNumber = actor.luk; break }
 			}
 		}

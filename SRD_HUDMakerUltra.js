@@ -78,7 +78,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.7
+ *                                 Version 1.0.8
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +106,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010007; // 1.0.7
+Imported.SRD_HUDMakerUltra = 0x010008; // 1.0.8
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -1606,9 +1606,9 @@ class Sprite_UltraHUDComponent_Window extends Sprite_UltraHUDComponent {
 
 	setupWindow() {
 		const windowData = this._data.WindowData;
-		const padding = this._hud.getConfig().processDynamicInput(windowData.Padding || 12, true);
-		const margin = this._hud.getConfig().processDynamicInput(windowData.Margin || 4, true);
-		const backgroundOpacity = this._hud.getConfig().processDynamicInput(windowData.BackgroundOpacity || 75, true);
+		const padding = this._hud.getConfig().processDynamicInput(typeof windowData.Padding === "number" ? windowData.Padding : 12, true);
+		const margin = this._hud.getConfig().processDynamicInput(typeof windowData.Margin === "number" ? windowData.Margin : 4, true);
+		const backgroundOpacity = this._hud.getConfig().processDynamicInput(typeof windowData.BackgroundOpacity === "number" ? windowData.BackgroundOpacity : 75, true);
 		this._window = new Window_Base(new Rectangle(0, 0, this._windowWidth, this._windowHeight));
 		this._window.windowSkin = ImageManager.loadSystem(windowData.WindowSkin);
 		this._window.padding = padding;
