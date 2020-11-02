@@ -78,7 +78,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.8
+ *                                 Version 1.0.9
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +106,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010008; // 1.0.8
+Imported.SRD_HUDMakerUltra = 0x010009; // 1.0.9
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -1903,8 +1903,12 @@ class Scene_Map {
 		$.Scene_Map.updateMenuButton.apply(this, arguments);
 	}
 
+	shouldHUDBeAvailable() {
+		return !$gameMap.isEventRunning();
+	};
+
 	updateUltraHUDContainerVisibility() {
-		const menuEnabled = this.isMenuEnabled();
+		const menuEnabled = this.shouldHUDBeAvailable();
 		if(menuEnabled === this._menuEnabled && this._ultraHudContainer !== null) {
 			this._ultraHudContainer.visible = this.ultraHUDVisibility();
 			this._ultraHudContainer.setVisibilityState(!($.hideDuringEvents && !menuEnabled));
