@@ -1909,7 +1909,6 @@ class Scene_Map {
 	};
 
 	updateUltraHUDContainerVisibility() {
-		console.log($gameMap.isEventRunning(), this.shouldHUDBeAvailable());
 		const hudEnabled = this.shouldHUDBeAvailable();
 		if(hudEnabled === this._shouldHUDBeAvailable && this._ultraHudContainer !== null) {
 			this._ultraHudContainer.visible = this.ultraHUDVisibility();
