@@ -78,7 +78,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.9
+ *                                 Version 1.0.10
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +106,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010009; // 1.0.9
+Imported.SRD_HUDMakerUltra = 0x01000a; // 1.0.10
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -1884,6 +1884,7 @@ class Scene_Map {
 	initialize() {
 		$.Scene_Map.initialize.apply(this, arguments);
 		this._ultraHudContainer = null;
+		this._shouldHUDBeAvailable = false;
 	}
 
 	createSpriteset() {
@@ -1908,11 +1909,15 @@ class Scene_Map {
 	};
 
 	updateUltraHUDContainerVisibility() {
-		const menuEnabled = this.shouldHUDBeAvailable();
-		if(menuEnabled === this._menuEnabled && this._ultraHudContainer !== null) {
+		console.log($gameMap.isEventRunning(), this.shouldHUDBeAvailable());
+		const hudEnabled = this.shouldHUDBeAvailable();
+		if(hudEnabled === this._shouldHUDBeAvailable && this._ultraHudContainer !== null) {
 			this._ultraHudContainer.visible = this.ultraHUDVisibility();
-			this._ultraHudContainer.setVisibilityState(!($.hideDuringEvents && !menuEnabled));
+			this._ultraHudContainer.setVisibilityState(!($.hideDuringEvents && !hudEnabled));
 		}
+        if (hudEnabled !== this._shouldHUDBeAvailable) {
+            this._shouldHUDBeAvailable = hudEnabled;
+        }
 	}
 
 	ultraHUDVisibility() {
