@@ -78,7 +78,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.10
+ *                                 Version 1.0.12
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +106,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x01000a; // 1.0.10
+Imported.SRD_HUDMakerUltra = 0x01000c; // 1.0.12
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -578,7 +578,7 @@ class Sprite_UltraHUDComponent extends Sprite {
 			this.rotation = (this._data.Rotation || 0) * (Math.PI / 180);
 		}
 		if(this._data.Opacity !== undefined) {
-			this.alpha = Number(this._data.Opacity || 1.0).clamp(0, 1);
+			this.alpha = Number(typeof this._data.Opacity === "number" ? this._data.Opacity : 1.0).clamp(0, 1);
 		}
 	}
 
@@ -809,7 +809,12 @@ class UltraHUDComponent_Animation {
 		this.onAnimationComplete.trigger();
 	}
 
+	isComponentValid() {
+		return !!this._component && !this._component._destroyed;
+	}
+
 	setValue(val) {
+		if(!this.isComponentValid()) return;
 		switch(this._property) {
 			case 0: { this._component.x = val; break; }
 			case 1: { this._component.y = val; break; }
