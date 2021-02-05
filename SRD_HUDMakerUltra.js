@@ -78,7 +78,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.12
+ *                                 Version 1.0.13
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +106,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x01000c; // 1.0.12
+Imported.SRD_HUDMakerUltra = 0x01000d; // 1.0.13
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -1681,14 +1681,19 @@ class Sprite_UltraHUDComponent_ActorFace extends Sprite_UltraHUDComponent {
 	renderBitmap(actorId) {
 		const actor = $gameActors.actor(actorId);
 		if(actor) {
-			if(this._oldActor !== null && this._oldActorSignalId !== null) {
+			if(this._oldActor !== null && this._oldActorSignalId !== null && this._oldActor.onFaceImageChanged) {
 				this._oldActor.onFaceImageChanged.remove(this._oldActorSignalId);
 				this._oldActor = null;
 				this._oldActorSignalId = null;
 			}
 			this.renderBitmapInternal(actor);
-			this._oldActor = actor;
-			this._oldActorSignalId = actor.onFaceImageChanged.run(this.renderBitmapInternal.bind(this, actor));
+			if(actor && actor.onFaceImageChanged) {
+				this._oldActor = actor;
+				this._oldActorSignalId = actor.onFaceImageChanged.run(this.renderBitmapInternal.bind(this, actor));
+			} else {
+				this._oldActor = null;
+				this._oldActorSignalId = null;
+			}
 		}
 	}
 
