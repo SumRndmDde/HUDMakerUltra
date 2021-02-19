@@ -8,7 +8,7 @@
  * @help
  * ============================================================================
  *                                  Ultra Base
- *                                 Version 1.0.7
+ *                                 Version 1.1.0
  *                                    SRDude
  * ============================================================================
  *
@@ -34,7 +34,7 @@ var SRD = SRD || {};
 SRD.UltraBase = SRD.UltraBase || {};
 
 var Imported = Imported || {};
-Imported.SRD_UltraBase = 0x010007; // 1.0.7
+Imported.SRD_UltraBase = 0x010100; // 1.1.0
 
 (function($) {
 
@@ -850,7 +850,7 @@ class UltraDynamicCondition_VariableComponent extends UltraDynamicCondition_Base
 
 	start() {
 		this.checkForChange();
-		this._destroyId = $gameVariables.onVariableChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onVariableChanged.run(this.checkForChange.bind(this));
 	}
 
 	verify() {
@@ -876,7 +876,7 @@ class UltraDynamicCondition_VariableComponent extends UltraDynamicCondition_Base
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameVariables.onVariableChanged.remove(this._destroyId);
+			UltraTriggerManager.onVariableChanged.remove(this._destroyId);
 		}
 	}
 }
@@ -1068,7 +1068,7 @@ class UltraDynamicCondition_GoldComponent extends UltraDynamicCondition_BaseComp
 
 	start() {
 		this.checkForChange();
-		this._destroyId = $gameParty.onGoldChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onGoldChanged.run(this.checkForChange.bind(this));
 	}
 
 	verify() {
@@ -1091,7 +1091,7 @@ class UltraDynamicCondition_GoldComponent extends UltraDynamicCondition_BaseComp
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameParty.onGoldChanged.remove(this._destroyId);
+			UltraTriggerManager.onGoldChanged.remove(this._destroyId);
 		}
 	}
 }
@@ -1175,7 +1175,7 @@ class UltraDynamicCondition_InventoryComponent extends UltraDynamicCondition_Bas
 			case 2: { this.checkForChange = this.checkArmors; break; }
 		}
 		this.checkForChange();
-		this._destroyId = $gameParty.onItemCountChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onItemCountChanged.run(this.checkForChange.bind(this));
 	}
 
 	verify() {
@@ -1201,7 +1201,7 @@ class UltraDynamicCondition_InventoryComponent extends UltraDynamicCondition_Bas
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameParty.onItemCountChanged.remove(this._destroyId);
+			UltraTriggerManager.onItemCountChanged.remove(this._destroyId);
 		}
 	}
 }
@@ -1627,18 +1627,18 @@ class UltraDynamicValue_GeneralComponent extends UltraDynamicValue_BaseComponent
 			case 2:
 			case 3:
 			case 8: {
-				this._destroyId = $gameMap.onMapChanged.run(this.checkForChange.bind(this));
+				this._destroyId = UltraTriggerManager.onMapChanged.run(this.checkForChange.bind(this));
 				break;
 			}
 			case 101: {
-				this._destroyId = $gameParty.onGoldChanged.run(this.checkForChange.bind(this));
+				this._destroyId = UltraTriggerManager.onGoldChanged.run(this.checkForChange.bind(this));
 				break;
 			}
 			case 203:
 			case 204:
 			case 205:
 			case 206: {
-				this._destroyId = $gameSystem.onSystemStatsChanged.run(this.checkForChange.bind(this));
+				this._destroyId = UltraTriggerManager.onSystemStatsChanged.run(this.checkForChange.bind(this));
 				break;
 			}
 		}
@@ -1742,18 +1742,18 @@ class UltraDynamicValue_GeneralComponent extends UltraDynamicValue_BaseComponent
 				case 1:
 				case 2:
 				case 3: {
-					$gameMap.onMapChanged.remove(this._destroyId);
+					UltraTriggerManager.onMapChanged.remove(this._destroyId);
 					break;
 				}
 				case 101: {
-					$gameParty.onGoldChanged.remove(this._destroyId);
+					UltraTriggerManager.onGoldChanged.remove(this._destroyId);
 					break;
 				}
 				case 203:
 				case 204:
 				case 205:
 				case 206: {
-					$gameSystem.onSystemStatsChanged.remove(this._destroyId);
+					UltraTriggerManager.onSystemStatsChanged.remove(this._destroyId);
 					break;
 				}
 			}
@@ -1783,7 +1783,7 @@ class UltraDynamicValue_SwitchComponent extends UltraDynamicValue_BaseComponent 
 
 	start() {
 		this.checkForChange();
-		this._destroyId = $gameSwitches.onSwitchChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onSwitchChanged.run(this.checkForChange.bind(this));
 	}
 
 	checkForChange() {
@@ -1797,7 +1797,7 @@ class UltraDynamicValue_SwitchComponent extends UltraDynamicValue_BaseComponent 
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameSwitches.onSwitchChanged.remove(this._destroyId);
+			UltraTriggerManager.onSwitchChanged.remove(this._destroyId);
 		}
 	}
 }
@@ -1817,7 +1817,7 @@ class UltraDynamicValue_VariableComponent extends UltraDynamicValue_BaseComponen
 
 	start() {
 		this.checkForChange();
-		this._destroyId = $gameVariables.onVariableChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onVariableChanged.run(this.checkForChange.bind(this));
 	}
 
 	checkForChange() {
@@ -1831,7 +1831,7 @@ class UltraDynamicValue_VariableComponent extends UltraDynamicValue_BaseComponen
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameVariables.onVariableChanged.remove(this._destroyId);
+			UltraTriggerManager.onVariableChanged.remove(this._destroyId);
 		}
 	}
 }
@@ -2030,7 +2030,7 @@ class UltraDynamicValue_InventoryComponent extends UltraDynamicValue_BaseCompone
 			case 2: { this.checkForChange = this.checkArmors; break; }
 		}
 		this.checkForChange();
-		this._destroyId = $gameParty.onItemCountChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onItemCountChanged.run(this.checkForChange.bind(this));
 	}
 
 	checkItems() {
@@ -2062,7 +2062,7 @@ class UltraDynamicValue_InventoryComponent extends UltraDynamicValue_BaseCompone
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameParty.onItemCountChanged.remove(this._destroyId);
+			UltraTriggerManager.onItemCountChanged.remove(this._destroyId);
 			this._destroyId = null;
 		}
 	}
@@ -2276,20 +2276,73 @@ DataManager.isPluginDatabaseLoaded_Ultra = function() {
 };
 
 //=============================================================================
+// * UltraTriggerManager
+// *
+// * Stores references to various triggers.
+//=============================================================================
+class UltraTriggerManager {
+	static initialize() {
+		this.onSwitchChanged = new UltraSignal();
+		this.onVariableChanged = new UltraSignal();
+		this.onGoldChanged = new UltraSignal();
+		this.onItemCountChanged = new UltraSignal();
+		this.onMapChanged = new UltraSignal();
+		this.onSystemStatsChanged = new UltraSignal();
+	}
+
+	static onSwitchChange() {
+		this.onSwitchChanged.trigger();
+	}
+
+	static onVariableChange() {
+		this.onVariableChanged.trigger();
+	}
+
+	static onGoldChange() {
+		this.onGoldChanged.trigger();
+	}
+
+	static onItemCountChange() {
+		this.onItemCountChanged.trigger();
+	}
+
+	static onMapChange() {
+		this.onMapChanged.trigger();
+	}
+
+	static onSystemStatsChange() {
+		this.onSystemStatsChanged.trigger();
+	}
+
+	static onFaceImageChange(actorId) {
+		const signal = UltraTriggerManager.getOnFaceChangeSignal(actorId);
+		if(signal) {
+			signal.trigger();
+		}
+	}
+
+	static getOnFaceChangeSignal(actorId) {
+		if(!this.onFaceImageChangeArray) {
+			this.onFaceImageChangeArray = [];
+		}
+		if(!this.onFaceImageChangeArray[actorId]) {
+			this.onFaceImageChangeArray[actorId] = new UltraSignal();
+		}
+		return this.onFaceImageChangeArray[actorId];
+	}
+}
+
+UltraTriggerManager.initialize();
+
+//=============================================================================
 // * Game_Switches
 // *
 // * Added an `UltraSignal` that triggers whenever a switch is changed.
 //=============================================================================
-$.Game_Switches_initialize = Game_Switches.prototype.initialize;
-Game_Switches.prototype.initialize = function() {
-	$.Game_Switches_initialize.apply(this, arguments);
-	this.onSwitchChanged = new UltraSignal();
-};
-
 $.Game_Switches_onChange = Game_Switches.prototype.onChange;
 Game_Switches.prototype.onChange = function() {
 	$.Game_Switches_onChange.apply(this, arguments);
-	this.onSwitchChanged.trigger();
+	UltraTriggerManager.onSwitchChange();
 };
 
 //=============================================================================
@@ -2297,16 +2350,10 @@ Game_Switches.prototype.onChange = function() {
 // *
 // * Added an `UltraSignal` that triggers whenever a variable is changed.
 //=============================================================================
-$.Game_Variables_initialize = Game_Variables.prototype.initialize;
-Game_Variables.prototype.initialize = function() {
-	$.Game_Variables_initialize.apply(this, arguments);
-	this.onVariableChanged = new UltraSignal();
-};
-
 $.Game_Variables_onChange = Game_Variables.prototype.onChange;
 Game_Variables.prototype.onChange = function() {
 	$.Game_Variables_onChange.apply(this, arguments);
-	this.onVariableChanged.trigger();
+	UltraTriggerManager.onVariableChange();
 };
 
 //=============================================================================
@@ -2314,23 +2361,16 @@ Game_Variables.prototype.onChange = function() {
 // *
 // * Added an `UltraSignal` that triggers whenever a gold is changed.
 //=============================================================================
-$.Game_Party_initialize = Game_Party.prototype.initialize;
-Game_Party.prototype.initialize = function() {
-	$.Game_Party_initialize.apply(this, arguments);
-	this.onGoldChanged = new UltraSignal();
-	this.onItemCountChanged = new UltraSignal();
-};
-
 $.Game_Party_gainGold = Game_Party.prototype.gainGold;
 Game_Party.prototype.gainGold = function(amount) {
 	$.Game_Party_gainGold.apply(this, arguments);
-	this.onGoldChanged.trigger();
+	UltraTriggerManager.onGoldChange();
 };
 
 $.Game_Party_gainItem = Game_Party.prototype.gainItem;
 Game_Party.prototype.gainItem = function(item, amount, includeEquip) {
 	$.Game_Party_gainItem.apply(this, arguments);
-	this.onItemCountChanged.trigger();
+	UltraTriggerManager.onItemCountChange();
 };
 
 //=============================================================================
@@ -2338,16 +2378,10 @@ Game_Party.prototype.gainItem = function(item, amount, includeEquip) {
 // *
 // * Added an `UltraSignal` that triggers whenever map is changed.
 //=============================================================================
-$.Game_Map_initialize = Game_Map.prototype.initialize;
-Game_Map.prototype.initialize = function() {
-	$.Game_Map_initialize.apply(this, arguments);
-	this.onMapChanged = new UltraSignal();
-};
-
 $.Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId) {
 	$.Game_Map_setup.apply(this, arguments);
-	this.onMapChanged.trigger();
+	UltraTriggerManager.onMapChange();
 };
 
 //=============================================================================
@@ -2355,34 +2389,28 @@ Game_Map.prototype.setup = function(mapId) {
 // *
 // * Added an `UltraSignal` that triggers whenever map is changed.
 //=============================================================================
-$.Game_System_initialize = Game_System.prototype.initialize;
-Game_System.prototype.initialize = function() {
-	$.Game_System_initialize.apply(this, arguments);
-	this.onSystemStatsChanged = new UltraSignal();
-};
-
 $.Game_System_onBattleStart = Game_System.prototype.onBattleStart;
 Game_System.prototype.onBattleStart = function() {
 	$.Game_System_onBattleStart.apply(this, arguments);
-	this.onSystemStatsChanged.trigger();
+	UltraTriggerManager.onSystemStatsChange();
 };
 
 $.Game_System_onBattleWin = Game_System.prototype.onBattleWin;
 Game_System.prototype.onBattleWin = function() {
 	$.Game_System_onBattleWin.apply(this, arguments);
-	this.onSystemStatsChanged.trigger();
+	UltraTriggerManager.onSystemStatsChange();
 };
 
 $.Game_System_onBattleEscape = Game_System.prototype.onBattleEscape;
 Game_System.prototype.onBattleEscape = function() {
 	$.Game_System_onBattleEscape.apply(this, arguments);
-	this.onSystemStatsChanged.trigger();
+	UltraTriggerManager.onSystemStatsChange();
 };
 
 $.Game_System_onBeforeSave = Game_System.prototype.onBeforeSave;
 Game_System.prototype.onBeforeSave = function() {
 	$.Game_System_onBeforeSave.apply(this, arguments);
-	this.onSystemStatsChanged.trigger();
+	UltraTriggerManager.onSystemStatsChange();
 };
 
 //=============================================================================
@@ -2390,22 +2418,21 @@ Game_System.prototype.onBeforeSave = function() {
 // *
 // * Added an `UltraSignal` that triggers whenever actor face image is changed.
 //=============================================================================
-$.Game_Actor_initialize = Game_Actor.prototype.initialize;
-Game_Actor.prototype.initialize = function() {
-	$.Game_Actor_initialize.apply(this, arguments);
-	this.onFaceImageChanged = new UltraSignal();
-};
-
 $.Game_Actor_setFaceImage = Game_Actor.prototype.setFaceImage;
 Game_Actor.prototype.setFaceImage = function(faceName, faceIndex) {
 	$.Game_Actor_setFaceImage.apply(this, arguments);
-	this.onFaceImageChanged.trigger();
+	UltraTriggerManager.onFaceImageChange(this._actorId);
+};
+
+Game_Actor.prototype.getOnFaceChangeSignal = function() {
+	return UltraTriggerManager.getOnFaceChangeSignal(this._actorId);
 };
 
 //=============================================================================
 // * Plugin Exports
 //=============================================================================
 const exports = window;
+exports.UltraTriggerManager                             = UltraTriggerManager;
 exports.UltraSignal                                     = UltraSignal;
 exports.UltraUtils                                      = UltraUtils;
 exports.UltraEasingCurveTypes                           = UltraEasingCurveTypes;

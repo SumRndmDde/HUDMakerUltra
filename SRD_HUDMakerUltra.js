@@ -25,6 +25,13 @@
  * @off Show
  * @default false
  *
+ * @param Hide Battle Selection Window
+ * @desc If ON, the enemy/party selection window will be made invisible.
+ * @type boolean
+ * @on Hide
+ * @off Show
+ * @default false
+ *
  * @param Fade During Events
  * @desc If ON, the HUD will fade out during events.
  * @type boolean
@@ -78,7 +85,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.0.13
+ *                                 Version 1.1.0
  *                                    SRDude
  * ============================================================================
  *
@@ -106,7 +113,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x01000d; // 1.0.13
+Imported.SRD_HUDMakerUltra = 0x010100; // 1.1.0
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -128,6 +135,20 @@ $.hudDataPath = "data/plugin/UltraHUD.json";
 function CheckDependencies() {
 	if(typeof Imported.SRD_UltraBase !== "number") {
 		console.warn("SRD_HUDMakerUltra.js requires SRD_UltraBase.js to be installed!");
+		return false;
+	}
+
+	if(Imported.SRD_UltraBase < 0x010100) {
+		const msg = "SRD_UltraBase.js requies an update! Please update to the latest version.";
+		console.warn(msg);
+		if(confirm(msg + "\nWould you like to open the download page (right-click -> save)?")) {
+			const url = "https://raw.githubusercontent.com/SumRndmDde/HUDMakerUltra/main/SRD_UltraBase.js";
+			if(Utils.isNwjs()) {
+				require('nw.gui').Shell.openExternal(url);
+			} else if(window && window.open) {
+				window.open(url);
+			}
+		}
 		return false;
 	}
 
@@ -153,6 +174,7 @@ const params = PluginManager.parameters("SRD_HUDMakerUltra");
 $.autoReload = String(params["Auto-Reload HUD Data"]).trim().toLowerCase() === "true";
 $.screenshots = String(params["Enable Screenshots"]).trim().toLowerCase() === "true";
 $.hideStatusWindow = String(params["Hide Battle Status Window"]).trim().toLowerCase() === "true";
+$.hideSelectionWindow = String(params["Hide Battle Selection Window"]).trim().toLowerCase() === "true";
 $.hideDuringEvents = String(params["Fade During Events"]).trim().toLowerCase() === "true";
 $.fadeOpacity = parseInt(params["Event Fade Opacity"] || "125") / 255;
 $.fadeDuration = parseInt(params["Fade Duration"] || "10");
@@ -1681,15 +1703,15 @@ class Sprite_UltraHUDComponent_ActorFace extends Sprite_UltraHUDComponent {
 	renderBitmap(actorId) {
 		const actor = $gameActors.actor(actorId);
 		if(actor) {
-			if(this._oldActor !== null && this._oldActorSignalId !== null && this._oldActor.onFaceImageChanged) {
-				this._oldActor.onFaceImageChanged.remove(this._oldActorSignalId);
+			if(this._oldActor !== null && this._oldActorSignalId !== null && this._oldActor.getOnFaceChangeSignal()) {
+				this._oldActor.getOnFaceChangeSignal().remove(this._oldActorSignalId);
 				this._oldActor = null;
 				this._oldActorSignalId = null;
 			}
 			this.renderBitmapInternal(actor);
-			if(actor && actor.onFaceImageChanged) {
+			if(actor && actor.getOnFaceChangeSignal()) {
 				this._oldActor = actor;
-				this._oldActorSignalId = actor.onFaceImageChanged.run(this.renderBitmapInternal.bind(this, actor));
+				this._oldActorSignalId = actor.getOnFaceChangeSignal().run(this.renderBitmapInternal.bind(this, actor));
 			} else {
 				this._oldActor = null;
 				this._oldActorSignalId = null;
@@ -2012,28 +2034,56 @@ class Scene_Battle {
 	}
 }
 
-if($.hideStatusWindow) {
+if($.hideStatusWindow || $.hideSelectionWindow) {
 
 $.Scene_Battle = $.Scene_Battle || {};
 
-$.Scene_Battle.updateStatusWindowVisibility = Scene_Battle.prototype.updateStatusWindowVisibility;
-Scene_Battle.prototype.updateStatusWindowVisibility = function() {
-	$.Scene_Battle.updateStatusWindowVisibility.apply(this, arguments);
-	this._statusWindow.visible = false;
-};
+if($.hideStatusWindow) {
 
-$.Scene_Battle.createStatusWindow = Scene_Battle.prototype.createStatusWindow;
-Scene_Battle.prototype.createStatusWindow = function() {
-	$.Scene_Battle.createStatusWindow.apply(this, arguments);
-
-	// Maybe a bit of a weird way to handle this?
-	// But most compatible and consistent way to achieve the desired behavior(?)
-	this._statusWindow.__srd_hudmakeultra_show = this._statusWindow.show;
-	this._statusWindow.show = function() {
-		this.__srd_hudmakeultra_show.apply(this, arguments);
-		this.visible = false;
+	$.Scene_Battle.updateStatusWindowVisibility = Scene_Battle.prototype.updateStatusWindowVisibility;
+	Scene_Battle.prototype.updateStatusWindowVisibility = function() {
+		$.Scene_Battle.updateStatusWindowVisibility.apply(this, arguments);
+		this._statusWindow.visible = false;
 	};
-};
+
+	$.Scene_Battle.createStatusWindow = Scene_Battle.prototype.createStatusWindow;
+	Scene_Battle.prototype.createStatusWindow = function() {
+		$.Scene_Battle.createStatusWindow.apply(this, arguments);
+
+		// Maybe a bit of a weird way to handle this?
+		// But most compatible and consistent way to achieve the desired behavior(?)
+		this._statusWindow.__srd_hudmakeultra_show = this._statusWindow.show;
+		this._statusWindow.show = function() {
+			this.__srd_hudmakeultra_show.apply(this, arguments);
+			this.visible = false;
+		};
+	};
+
+}
+
+if($.hideSelectionWindow) {
+
+	$.Scene_Battle.createActorWindow = Scene_Battle.prototype.createActorWindow;
+	Scene_Battle.prototype.createActorWindow = function() {
+		$.Scene_Battle.createActorWindow.apply(this, arguments);
+		this._actorWindow.__srd_hudmakeultra_show = this._actorWindow.show;
+		this._actorWindow.show = function() {
+			this.__srd_hudmakeultra_show.apply(this, arguments);
+			this.visible = false;
+		};
+	};
+
+	$.Scene_Battle.createEnemyWindow = Scene_Battle.prototype.createEnemyWindow;
+	Scene_Battle.prototype.createEnemyWindow = function() {
+		$.Scene_Battle.createEnemyWindow.apply(this, arguments);
+		this._enemyWindow.__srd_hudmakeultra_show = this._enemyWindow.show;
+		this._enemyWindow.show = function() {
+			this.__srd_hudmakeultra_show.apply(this, arguments);
+			this.visible = false;
+		};
+	};
+
+}
 
 }
 
