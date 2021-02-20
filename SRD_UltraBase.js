@@ -8,7 +8,7 @@
  * @help
  * ============================================================================
  *                                  Ultra Base
- *                                 Version 1.1.0
+ *                                 Version 1.1.1
  *                                    SRDude
  * ============================================================================
  *
@@ -34,7 +34,7 @@ var SRD = SRD || {};
 SRD.UltraBase = SRD.UltraBase || {};
 
 var Imported = Imported || {};
-Imported.SRD_UltraBase = 0x010100; // 1.1.0
+Imported.SRD_UltraBase = 0x010101; // 1.1.1
 
 (function($) {
 
@@ -814,7 +814,7 @@ class UltraDynamicCondition_SwitchComponent extends UltraDynamicCondition_BaseCo
 
 	start() {
 		this.checkForChange();
-		this._destroyId = $gameSwitches.onSwitchChanged.run(this.checkForChange.bind(this));
+		this._destroyId = UltraTriggerManager.onSwitchChanged.run(this.checkForChange.bind(this));
 	}
 
 	verify() {
@@ -831,7 +831,7 @@ class UltraDynamicCondition_SwitchComponent extends UltraDynamicCondition_BaseCo
 
 	destroy() {
 		if(this._destroyId !== null) {
-			$gameSwitches.onSwitchChanged.remove(this._destroyId);
+			UltraTriggerManager.onSwitchChanged.remove(this._destroyId);
 		}
 	}
 }
