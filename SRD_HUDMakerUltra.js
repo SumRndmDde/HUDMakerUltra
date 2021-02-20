@@ -85,7 +85,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.1.0
+ *                                 Version 1.1.2
  *                                    SRDude
  * ============================================================================
  *
@@ -113,7 +113,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010100; // 1.1.0
+Imported.SRD_HUDMakerUltra = 0x010102; // 1.1.2
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -2063,24 +2063,14 @@ if($.hideStatusWindow) {
 
 if($.hideSelectionWindow) {
 
-	$.Scene_Battle.createActorWindow = Scene_Battle.prototype.createActorWindow;
-	Scene_Battle.prototype.createActorWindow = function() {
-		$.Scene_Battle.createActorWindow.apply(this, arguments);
-		this._actorWindow.__srd_hudmakeultra_show = this._actorWindow.show;
-		this._actorWindow.show = function() {
-			this.__srd_hudmakeultra_show.apply(this, arguments);
-			this.visible = false;
-		};
-	};
+	$.Scene_Battle.update = Scene_Battle.prototype.update;
+	Scene_Battle.prototype.update = function() {
+		$.Scene_Battle.update.apply(this, arguments);
 
-	$.Scene_Battle.createEnemyWindow = Scene_Battle.prototype.createEnemyWindow;
-	Scene_Battle.prototype.createEnemyWindow = function() {
-		$.Scene_Battle.createEnemyWindow.apply(this, arguments);
-		this._enemyWindow.__srd_hudmakeultra_show = this._enemyWindow.show;
-		this._enemyWindow.show = function() {
-			this.__srd_hudmakeultra_show.apply(this, arguments);
-			this.visible = false;
-		};
+		// Same thing as the status window. This may be a bit scuffed, 
+		// but is probably best since making these windows invisible disables their functionality.
+		this._actorWindow.x = 999999;
+		this._enemyWindow.x = 999999;
 	};
 
 }
