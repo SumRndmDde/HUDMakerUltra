@@ -85,7 +85,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.1.2
+ *                                 Version 1.1.3
  *                                    SRDude
  * ============================================================================
  *
@@ -113,7 +113,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010102; // 1.1.2
+Imported.SRD_HUDMakerUltra = 0x010103; // 1.1.3
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -1319,6 +1319,10 @@ class Sprite_UltraHUDComponent_Gauge extends Sprite_UltraHUDComponent {
 		return this._smoothness;
 	}
 
+	isSmooth() {
+		return this._smoothness > 0;
+	}
+
 	setGaugeValue(value) {
 		if(this._value === null) {
 			this._value = value;
@@ -1327,6 +1331,10 @@ class Sprite_UltraHUDComponent_Gauge extends Sprite_UltraHUDComponent {
 		} else if(this._value !== value) {
 			this._targetValue = value;
 			this._duration = this.smoothness();
+			if(!this.isSmooth()) {
+				this._value = value;
+				this.prepareToRender();
+			}
 		}
 	}
 
@@ -1338,18 +1346,22 @@ class Sprite_UltraHUDComponent_Gauge extends Sprite_UltraHUDComponent {
 		} else if(this._maximum !== value) {
 			this._targetMaximum = value;
 			this._duration = this.smoothness();
+			if(!this.isSmooth()) {
+				this._maximum = value;
+				this.prepareToRender();
+			}
 		}
 	}
 
 	update() {
 		super.update();
-		this.updateGaugeAnimation();
 		if(this._dynamicValue !== null) {
 			this._dynamicValue.update();
 		}
 		if(this._dynamicMax !== null) {
 			this._dynamicMax.update();
 		}
+		this.updateGaugeAnimation();
 		if(this._needRedraw) {
 			this.renderBitmap();
 			this._needRedraw = false;
@@ -1363,6 +1375,9 @@ class Sprite_UltraHUDComponent_Gauge extends Sprite_UltraHUDComponent {
 			this._maximum = (this._maximum * (d - 1) + this._targetMaximum) / d;
 			this._duration--;
 			this.prepareToRender();
+		} else if(!this.isSmooth()) {
+			this.setGaugeValue(this._targetValue);
+			this.setGaugeMaximum(this._targetMaximum);
 		}
 	}
 
@@ -1561,13 +1576,13 @@ class Sprite_UltraHUDComponent_PictureGauge extends Sprite_UltraHUDComponent {
 
 	update() {
 		super.update();
-		this.updateGaugeAnimation();
 		if(this._dynamicValue !== null) {
 			this._dynamicValue.update();
 		}
 		if(this._dynamicMax !== null) {
 			this._dynamicMax.update();
 		}
+		this.updateGaugeAnimation();
 		if(this._needRedraw) {
 			this.renderBitmap();
 			this._needRedraw = false;
@@ -1580,6 +1595,10 @@ class Sprite_UltraHUDComponent_PictureGauge extends Sprite_UltraHUDComponent {
 			this._value = (this._value * (d - 1) + this._targetValue) / d;
 			this._maximum = (this._maximum * (d - 1) + this._targetMaximum) / d;
 			this._duration--;
+			this.resizeGauge();
+		} else if(this._value !== this._targetValue || this._maximum !== this._targetMaximum) {
+			this._value = this._targetValue;
+			this._maximum = this._targetMaximum;
 			this.resizeGauge();
 		}
 	}
