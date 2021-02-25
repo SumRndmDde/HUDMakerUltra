@@ -85,7 +85,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.1.4
+ *                                 Version 1.1.5
  *                                    SRDude
  * ============================================================================
  *
@@ -113,7 +113,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010104; // 1.1.4
+Imported.SRD_HUDMakerUltra = 0x010105; // 1.1.5
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -681,7 +681,7 @@ class Sprite_UltraHUDComponent extends Sprite {
 
 	updateMultiCondition() {
 		if(this._multiCondition !== null) {
-			this._multiCondition.update();
+			this._multiCondition.update(this);
 		}
 	}
 
@@ -703,6 +703,14 @@ class Sprite_UltraHUDComponent extends Sprite {
 
 	boundingRect() {
 		return new Rectangle(-this.anchor.x * this.width, -this.anchor.y * this.height, this.width, this.height);
+	}
+
+	isOverlayCoordinates(x, y, yOffset = 0) {
+		if(!this.isEnabled()) this.updateTransform();
+		const touchPos = new Point(x, y);
+		const localPos = this.worldTransform.applyInverse(touchPos);
+		return this.boundingRect().contains(localPos.x, localPos.y) || 
+			(yOffset != 0 ? this.boundingRect().contains(localPos.x, localPos.y + yOffset) : false);
 	}
 
 	isEnabled() {

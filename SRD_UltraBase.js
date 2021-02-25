@@ -8,7 +8,7 @@
  * @help
  * ============================================================================
  *                                  Ultra Base
- *                                 Version 1.1.1
+ *                                 Version 1.2.0
  *                                    SRDude
  * ============================================================================
  *
@@ -34,7 +34,7 @@ var SRD = SRD || {};
 SRD.UltraBase = SRD.UltraBase || {};
 
 var Imported = Imported || {};
-Imported.SRD_UltraBase = 0x010101; // 1.1.1
+Imported.SRD_UltraBase = 0x010200; // 1.2.0
 
 (function($) {
 
@@ -658,6 +658,8 @@ class UltraDynamicCondition {
 			case 7: { this._component = new UltraDynamicCondition_InventoryComponent(this._data, this); break; }
 			case 8: { this._component = new UltraDynamicCondition_OtherComponent(this._data, this); break; }
 			case 9: { this._component = new UltraDynamicCondition_CodeComponent(this._data, this); break; }
+			case 12: { this._component = new UltraDynamicCondition_NumberCompareComponent(this._data, this); break; }
+			case 13: { this._component = new UltraDynamicCondition_TextCompareComponent(this._data, this); break; }
 		}
 	}
 
@@ -676,7 +678,7 @@ class UltraDynamicCondition {
 
 	update() {
 		if(this._updateComponent !== null) {
-			this._updateComponent.update();
+			this._updateComponent.update(...arguments);
 		}
 	}
 
@@ -748,7 +750,7 @@ class UltraDynamicMultiCondition {
 
 	update() {
 		for(let i = 0; i < this.conditions.length; i++) {
-			this.conditions[i].update();
+			this.conditions[i].update(...arguments);
 		}
 	}
 
@@ -1207,6 +1209,134 @@ class UltraDynamicCondition_InventoryComponent extends UltraDynamicCondition_Bas
 }
 
 //=============================================================================
+// * UltraDynamicCondition_NumberCompareComponent
+//=============================================================================
+class UltraDynamicCondition_NumberCompareComponent extends UltraDynamicCondition_BaseComponent {
+	createFields() {
+		this._operator = this._data.Op;
+	}
+
+	start() {
+		this._dynamicNumber1 = new UltraDynamicNumber(this._data.Number1, this._parent.getConfig());
+		this._dynamicNumber1.onChange.run(this.checkForChange.bind(this));
+		this._dynamicNumber1.start();
+
+		this._dynamicNumber2 = new UltraDynamicNumber(this._data.Number2, this._parent.getConfig());
+		this._dynamicNumber2.onChange.run(this.checkForChange.bind(this));
+		this._dynamicNumber2.start();
+
+		this.checkForChange();
+	}
+
+	verify() {
+		return !!this._data.Number1 && !!this._data.Number2;
+	}
+
+	checkForChange() {
+		let comp = false;
+		if(this._dynamicNumber1 && this._dynamicNumber2) {
+			const one = this._dynamicNumber1.currentNumber;
+			const two = this._dynamicNumber2.currentNumber;
+			switch(this._operator) {
+				case 0: { comp = one === two; break; }
+				case 1: { comp = one !== two; break; }
+				case 2: { comp = one <= two; break; }
+				case 3: { comp = one >= two; break; }
+				case 4: { comp = one < two; break; }
+				case 5: { comp = one > two; break; }
+			}
+		}
+		this._parent.setState(comp);
+	}
+
+	getUpdateComponent() {
+		return this;
+	}
+
+	update() {
+		if(this._dynamicNumber1 !== null) {
+			this._dynamicNumber1.update();
+		}
+		if(this._dynamicNumber2 !== null) {
+			this._dynamicNumber2.update();
+		}
+	}
+
+	destroy() {
+		if(this._dynamicNumber1 !== null) {
+			this._dynamicNumber1.destroy();
+			this._dynamicNumber1 = null;
+		}
+		if(this._dynamicNumber2 !== null) {
+			this._dynamicNumber2.destroy();
+			this._dynamicNumber2 = null;
+		}
+	}
+}
+
+//=============================================================================
+// * UltraDynamicCondition_TextCompareComponent
+//=============================================================================
+class UltraDynamicCondition_TextCompareComponent extends UltraDynamicCondition_BaseComponent {
+	createFields() {
+		this._operator = this._data.Op;
+	}
+
+	start() {
+		this._dynamicText1 = new UltraDynamicText(this._data.Text1, this._parent.getConfig());
+		this._dynamicText1.onChange.run(this.checkForChange.bind(this));
+		this._dynamicText1.start();
+
+		this._dynamicText2 = new UltraDynamicText(this._data.Text2, this._parent.getConfig());
+		this._dynamicText2.onChange.run(this.checkForChange.bind(this));
+		this._dynamicText2.start();
+
+		this.checkForChange();
+	}
+
+	verify() {
+		return !!this._data.Text1 && !!this._data.Text2;
+	}
+
+	checkForChange() {
+		let comp = false;
+		if(this._dynamicText1 && this._dynamicText2) {
+			const one = this._dynamicText1.currentText;
+			const two = this._dynamicText2.currentText;
+			switch(this._operator) {
+				case 0: { comp = one === two; break; }
+				case 1: { comp = one !== two; break; }
+			}
+		}
+		this._parent.setState(comp);
+	}
+
+	getUpdateComponent() {
+		return this;
+	}
+
+	update() {
+		if(this._dynamicText1 !== null) {
+			this._dynamicText1.update();
+		}
+		if(this._dynamicText2 !== null) {
+			this._dynamicText2.update();
+		}
+	}
+
+	destroy() {
+		if(this._dynamicText1 !== null) {
+			this._dynamicText1.destroy();
+			this._dynamicText1 = null;
+		}
+		if(this._dynamicText2 !== null) {
+			this._dynamicText2.destroy();
+			this._dynamicText2 = null;
+		}
+	}
+}
+
+//=============================================================================
 // * UltraDynamicCondition_OtherComponent
 //=============================================================================
 class UltraDynamicCondition_OtherComponent extends UltraDynamicCondition_BaseComponent {
@@ -1215,7 +1345,7 @@ class UltraDynamicCondition_OtherComponent extends UltraDynamicCondition_BaseCom
 	}
 
 	verify() {
-		return this._check >= 0 && this._check < 3;
+		return this._check >= 0 && this._check < 4;
 	}
 
 	start() {
@@ -1223,6 +1353,7 @@ class UltraDynamicCondition_OtherComponent extends UltraDynamicCondition_BaseCom
 			case 0: { this.checkForChange = this.checkForChange_playtest; break; }
 			case 1: { this.checkForChange = this.checkForChange_inBattle; break; }
 			case 2: { this.checkForChange = this.checkForChange_onMap; break; }
+			case 3: { this.checkForChange = this.checkForChange_partyOverlay; break; }
 		}
 		this.checkForChange();
 	}
@@ -1239,12 +1370,30 @@ class UltraDynamicCondition_OtherComponent extends UltraDynamicCondition_BaseCom
 		this._parent.setState(!$gameParty.inBattle());
 	}
 
+	checkForChange_partyOverlay() {
+		const component = arguments[0];
+		if(component && component.isOverlayCoordinates) {
+			const allCharacters = [$gamePlayer].concat($gamePlayer.followers().visibleFollowers());
+			let result = false;
+			for(let i = 0; i < allCharacters.length; i++) {
+				const character = allCharacters[i];
+				if(component.isOverlayCoordinates(character.screenX(), character.screenY(), -$gameMap.tileHeight())) {
+					result = true;
+					break;
+				}
+			}
+			this._parent.setState(result);
+		} else {
+			this._parent.setState(false);
+		}
+	}
+
 	getUpdateComponent() {
 		return this;
 	}
 
 	update() {
-		this.checkForChange();
+		this.checkForChange(...arguments);
 	}
 }
 
