@@ -85,7 +85,7 @@
  * @help
  * ============================================================================
  *                                HUD Maker Ultra
- *                                 Version 1.1.3
+ *                                 Version 1.1.4
  *                                    SRDude
  * ============================================================================
  *
@@ -113,7 +113,7 @@ var SRD = SRD || {};
 SRD.HUDMakerUltra = SRD.HUDMakerUltra || {};
 
 var Imported = Imported || {};
-Imported.SRD_HUDMakerUltra = 0x010103; // 1.1.3
+Imported.SRD_HUDMakerUltra = 0x010104; // 1.1.4
 
 var $dataUltraHUD = null;
 var $gameUltraHUD = null;
@@ -706,7 +706,7 @@ class Sprite_UltraHUDComponent extends Sprite {
 	}
 
 	isEnabled() {
-		return this.visible;
+		return this.worldVisible;
 	}
 
 	onChildAdded(child) {
